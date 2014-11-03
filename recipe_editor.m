@@ -20,7 +20,6 @@ dx2 = lam * 2 / N2 / du;
 %% Missing pixels
 
 % detector 1
-
 load SACLA_Mask1;
 % left
 Mask1(1239:1243, 1:1169) = true;
@@ -32,7 +31,15 @@ Mask1(1:1173, 1170:1172) = true;
 % bottom
 Mask1(1244:end, 1232:1236) = true;
 
+% detector 2
+load SACLA_Mask2;
+Mask2(:) = true;
+Mask2(521:651, 521:642) = false;
+Mask2(547:551, : ) = true;
+Mask2(558:end, 557:end) = true;
+
+
 %% save
 
-save('recipe_name', '*');
+save(recipe_name, '*');
 clear all;
