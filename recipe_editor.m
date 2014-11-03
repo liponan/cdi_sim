@@ -1,8 +1,7 @@
 % Po-Nan Li 2014/10/29
+clear all;
 
 recipe_name = 'SACLA201406';
-
-clear all;
 %% Physical constants
 
 % detector 1
