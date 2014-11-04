@@ -1,4 +1,4 @@
-function F1 = CDIpreprocess(F0, bin, cutoff, recipe)
+function F2 = CDIpreprocess(F0, bin, cutoff, recipe)
 
 load(recipe);
 
@@ -22,6 +22,8 @@ if rmd ~= 0
     end
 end
 
+%% binning
+
 F0bin = bin3(F0, bin);
 M0bin = bin3(Mask1, bin);
 
@@ -40,5 +42,16 @@ else
     crop_size = 0;
 end
 F1 = F0bin( (1+crop_size):(end-crop_size), (1+crop_size):(end-crop_size) );
+
+%% symmetrize 
+
+F1r = rot90(F1, 2);
+
+mk1 = F1 > 0;
+mk2 = F1r > 0;
+
+F2 = 0.5 * (F1 + F1r);
+F2( ~mk1 & mk2 ) = F1r( ~mk1 & mk2 );
+F2( mk1 & ~mk2 ) = F1( mk1 & ~mk2 );
 
 
