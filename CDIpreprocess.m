@@ -33,7 +33,12 @@ F0ringsum = F0ringsum - cutoff*max(F0ringsum(:));
 
 cross_inds = find( F0ringsum(1:(end-1)) .* F0ringsum(2:end) < 0);
 
-crop_size = round( (length(F0bin) - 1 - cross_inds(2) )/2 );
+if length(cross_inds) > 1
+    crop_size = round( (length(F0bin) - 1 - cross_inds(2) )/2 );
+else
+    warning('Unable to cut-off.');
+    crop_size = 0;
+end
 F1 = F0bin( (1+crop_size):(end-crop_size), (1+crop_size):(end-crop_size) );
 
 
