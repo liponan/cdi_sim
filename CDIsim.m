@@ -41,7 +41,7 @@ beta1 = Iph*re^2/z1^2*du^2*dt;
 
 I1 = abs( fftshift(fft2(img1)) ).^2;
 I1 = poissrnd( beta1 * I1 ) ./ beta1;
-I1( Mask1 ) = 0;
+I1( Mask1 ) = 0; 
 
 %% generate I2
 
@@ -50,14 +50,15 @@ xx2 = 0:dx2:(dx0*( max(w0, h0) - 1 ));
 img2 = interp2(xx0, yy0.', img, xx2, xx2.');
 img2( isnan(img2) ) = 0;
 
-img1 = img1 ./ sum(img1(:)) .* sum(img(:)); % density normalization
+img2 = img2 ./ sum(img2(:)) .* sum(img(:)); % density normalization
 
 img2_pad = N2 - length(xx2);
+
 if img2_pad > 0
     if mod(img2_pad, 2) == 0
         img2 = padarray(img2, [(img2_pad/2) (img2_pad/2)]);
     else
-        img2_pad = img1_pad + 1;
+        img2_pad = img2_pad + 1;
         img2 = padarray(img2, [(img2_pad/2) (img2_pad/2)]);
         img2 = img2(2:end, 2:end);
     end
