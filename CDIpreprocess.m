@@ -1,4 +1,4 @@
-function F2 = CDIpreprocess(F0, bin, cutoff, recipe)
+function [F2, dx] = CDIpreprocess(F0, bin, cutoff, recipe)
 
 load(recipe);
 
@@ -29,17 +29,22 @@ M0bin = bin3(Mask1, bin);
 
 F0bin( M0bin > 0 ) = 0;
 
-[kk, F0ringsum] = ringsum(F0bin);
+if cutoff < 1
+    [kk, F0ringsum] = ringsum(F0bin);
 
-F0ringsum = F0ringsum - cutoff*max(F0ringsum(:));
+    F0ringsum = F0ringsum - cutoff*max(F0ringsum(:));
 
-cross_inds = find( F0ringsum(1:(end-1)) .* F0ringsum(2:end) < 0);
+    cross_inds = find( F0ringsum(1:(end-1)) .* F0ringsum(2:end) < 0);
 
-if length(cross_inds) > 1
-    crop_size = round( (length(F0bin) - 1 - cross_inds(2) )/2 );
+    if length(cross_inds) > 1
+        crop_size = round( (length(F0bin) - 1 - cross_inds(2) )/2 );
+        disp(['auto cut-off: ' int2str(length(F0bin)) 'x' int2str(length(F0bin)) ' => ' int2str(length(F0bin)-2*crop_size) 'x' int2str(length(F0bin)-2*crop_size)]);
+    else
+        warning('Unable to cut-off.');
+        crop_size = 0;
+    end
 else
-    warning('Unable to cut-off.');
-    crop_size = 0;
+    crop_size = cutoff;
 end
 F1 = F0bin( (1+crop_size):(end-crop_size), (1+crop_size):(end-crop_size) );
 
@@ -54,4 +59,5 @@ F2 = 0.5 * (F1 + F1r);
 F2( ~mk1 & mk2 ) = F1r( ~mk1 & mk2 );
 F2( mk1 & ~mk2 ) = F1( mk1 & ~mk2 );
 
+dx = lam * z1 / length(F2) / du / bin;
 
