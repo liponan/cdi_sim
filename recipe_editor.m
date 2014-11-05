@@ -17,7 +17,7 @@ dx1 = lam * z1 / N1 / du;
 % detector 2
 N2 = 1100;
 z2 = 2.7;
-dx2 = lam * 2 / N2 / du;
+dx2 = lam * z2 / N2 / du;
 
 %% Missing pixels
 
@@ -39,6 +39,8 @@ Mask2(:) = true;
 Mask2(521:651, 521:642) = false;
 Mask2(547:551, : ) = true;
 Mask2(558:end, 557:end) = true;
+
+Mask2 = circshift(Mask2, [-30 -30]);
 
 
 %% save
