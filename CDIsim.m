@@ -40,7 +40,9 @@ re = 2.81794e-15; % meter
 beta1 = Iph*re^2/z1^2*du^2*dt;
 
 I1 = abs( fftshift(fft2(img1)) ).^2;
-I1 = poissrnd( beta1 * I1 ) ./ beta1;
+if ~strcmp(recipe, 'ideal')
+    I1 = poissrnd( beta1 * I1 ) ./ beta1;
+end
 I1( Mask1 ) = 0; 
 
 %% generate I2
