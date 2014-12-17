@@ -17,8 +17,15 @@ if rmd ~= 0
         F0 = F0( (1+rmd/2):(end-rmd/2), (1+rmd/2):(end-rmd/2) );
         Mask1 = Mask1( (1+rmd/2):(end-rmd/2), (1+rmd/2):(end-rmd/2) );
     else
-        warning('Image size and bin size mismatch. Symmetry migh lost!');
-        Mask1 = Mask1( round(rmd/2):(end-round(rmd/2)), round(rmd/2):(end-round(rmd/2)) );
+        if rmd == 1
+            rmd = (bin-1);
+            F0 = F0( (1+rmd):(end-rmd), (1+rmd):(end-rmd) );
+            Mask1 = Mask1( round(rmd+1):(end-round(rmd)), round(rmd+1):(end-round(rmd)) );
+        else
+            warning('Image size and bin size mismatch. Symmetry migh lost!')
+            F0 = F0( round(1+rmd/2):(end-round(rmd/2)), round(1+rmd/2):(end-round(rmd/2)) );
+            Mask1 = Mask1( round(rmd/2):(end-round(rmd/2)), round(rmd/2):(end-round(rmd/2)) );
+        end
     end
 end
 
