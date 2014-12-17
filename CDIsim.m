@@ -10,10 +10,10 @@ dx0 = 1e-9;
 w0 = size(img, 2);
 h0 = size(img, 1);
 
-% check oversampling ratio
-if min(w0, h0) > N1
-    error('oversampling ratio insufficient for the input sample size');
-end
+% % check oversampling ratio
+% if min(w0, h0) > N1
+%     error('oversampling ratio insufficient for the input sample size');
+% end
 
 xx0 = 0:dx0:(dx0*(w0-1));
 yy0 = 0:dx0:(dx0*(h0-1));
@@ -22,7 +22,7 @@ yy0 = 0:dx0:(dx0*(h0-1));
 
 xx1 = 0:dx1:(dx0*( max(w0, h0) - 1 ));
 
-img1 = interp2(xx0, yy0.', img, xx1, xx1.');
+img1 = interp2(xx0, yy0.', img, xx1, xx1.', 'nearest');
 img1( isnan(img1) ) = 0;
 
 img1 = img1 ./ sum(img1(:)) .* sum(img(:)); % density normalization
@@ -40,7 +40,7 @@ re = 2.81794e-15; % meter
 beta1 = Iph*re^2/z1^2*du^2*dt;
 
 I1 = abs( fftshift(fft2(img1)) ).^2;
-if ~strcmp(recipe, 'ideal')
+if ~strcmp(recipe, 'ideal') && ~strcmp(recipe, 'SP8_ideal')
     I1 = poissrnd( beta1 * I1 ) ./ beta1;
 end
 I1( Mask1 ) = 0; 
@@ -49,7 +49,7 @@ I1( Mask1 ) = 0;
 
 xx2 = 0:dx2:(dx0*( max(w0, h0) - 1 ));
 
-img2 = interp2(xx0, yy0.', img, xx2, xx2.');
+img2 = interp2(xx0, yy0.', img, xx2, xx2.', 'nearest');
 img2( isnan(img2) ) = 0;
 
 img2 = img2 ./ sum(img2(:)) .* sum(img(:)); % density normalization
