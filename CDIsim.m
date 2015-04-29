@@ -1,7 +1,14 @@
-function [I1, img1, I2, img2, beta1, beta2] = CDIsim(img, recipe)
+function [I1, img1, I2, img2, beta1, beta2] = CDIsim(img, recipe, varargin)
 
 % load recipe
 load(recipe);
+
+if ~isempty(varargin)
+    dx1 = dx1 * N1 / varargin{1};
+    N1 = varargin{1};
+end
+     
+
 
 %% analyze input image
 
@@ -43,6 +50,18 @@ I1 = abs( fftshift(fft2(img1)) ).^2;
 if ~strcmp(recipe, 'ideal') && ~strcmp(recipe, 'SP8_ideal')
     I1 = poissrnd( beta1 * I1 ) ./ beta1;
 end
+
+
+mask_crop = length(Mask1) - N1;
+if mod(mask_crop, 2) == 0
+    Mask1 = Mask1( (1+mask_crop/2):(end-mask_crop), (1+mask_crop/2):(end-mask_crop) );
+else
+    mask_crop = mask_crop-1;
+    mask_crop
+    Mask1 = Mask1(2:end, 2:end);
+    Mask1 = Mask1( (1+mask_crop/2):(end-mask_crop), (1+mask_crop/2):(end-mask_crop) );
+end
+
 I1( Mask1 ) = 0; 
 
 %% generate I2
