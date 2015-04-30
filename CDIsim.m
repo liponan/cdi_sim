@@ -7,6 +7,9 @@ if ~isempty(varargin)
     dx1 = dx1 * N1 / varargin{1};
     N1 = varargin{1};
 end
+if length(varargin) > 1
+    dx0 = varargin{2};
+end
      
 
 
