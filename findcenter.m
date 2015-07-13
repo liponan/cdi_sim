@@ -1,6 +1,6 @@
 function [y_shift, x_shift] = findcenter(img)
 
-sigma = 0.1;
+sigma = 0.5;
 
 %%%%% x shift %%%%%
 
@@ -13,7 +13,13 @@ xc = xcorr( xproj2, fliplr( xproj2 ) );
 [cy, cx] = findpeaks( double(xc), 'SORTSTR', 'descend' );
 
 x_xc = -(length(xproj2)-1):(length(xproj2)-1);
+
 x_shift = x_xc( cx(1) );
+t = 1;
+while (x_shift > 20)
+    t = t + 1;
+    x_shift = x_xc( cx(t) );
+end
 
 %%%%% y shift %%%%%
 
@@ -27,3 +33,8 @@ xc = xcorr( yproj2, fliplr( yproj2 ) );
 
 y_xc = -(length(yproj2)-1):(length(yproj2)-1);
 y_shift = y_xc( rx(1) );
+t = 1;
+while (y_shift > 20)
+    t = t + 1;
+    y_shift = y_xc( rx(t) );
+end
